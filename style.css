@@ -1,6 +1,67 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li span {
+    height: fit-content;
+    display: block;
+    color: white;
+    text-align: center;
+    align-items: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  /* Change the link color to #111 (black) on hover */
+  li span:hover {
+    background-color: #111;
+  }
 .header{
     display: inline;
 }
 .navButtons{
     display: inline;
 }
+.post{
+    border-color: black;
+    border-radius: 10px;
+}
+.modal {
+    display: none;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color:bisque;
+    padding: 0.7em;
+    max-height: fit-content;
+    max-width: fit-content;
+    border-radius: 20px;
+    box-shadow: 2px 1px 10px 0px #424242;
+    overflow: auto;
+    
+  }
+  .modal-content {
+    animation-name: animate;
+    animation-duration: 0.5s
+  }
+
+  @keyframes animate {
+    from {top:-320px; opacity:0}
+    to {top:0; opacity:1}
+  }
+  .close {
+    font-size:  30px;
+    font-weight:  bold;
+  }
+  

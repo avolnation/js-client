@@ -3,12 +3,27 @@
         <title></title>
     </head>
     <body>
-        <div class="header">
-            <div id="posts-btn" class="navButtons">Posts</div>
-            <div id="albums-btn" class="navButtons">Albums</div>
-            <div id="photos-btn" class="navButtons">Photos</div>
-        </div>
-        <div id="info">There will be some data</div>
+        <ul>
+            <li><span onclick="render()">Posts<span></li>
+            <li><span>Albums<span></li>
+            <li><span>Photos<span></li>
+          </ul>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <span class="close">×</span>
+                </div>
+                <div class="postTitle"></div>
+                <div class="postBody"></div>
+                <div class="modal-body">
+                    <form id="MyForm" name="my-form">
+                        <input type="text" placeholder="Имя" name="form-name">
+                        <input type="submit">
+                      </form>
+                </div>
+                </div>
+              </div></div>
+        <div id="info"></div>
 
         <script src="./script.js"></script>
         <link rel="stylesheet" href="./style.css"
