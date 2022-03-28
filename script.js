@@ -3,8 +3,34 @@ var btn = document.getElementById("btn");
 var span = document.getElementsByClassName("close")[0];
 
 function openModal(id) {
+    document.querySelector(".postTitle").innerHTML = data[id-1].title
     document.querySelector(".postBody").innerHTML = data[id-1].body
     modal.style.display = "block";
+    
+    // document.getElementById('MyForm').addEventListener('submit', function (e) {
+    //     e.preventDefault()
+      
+    //     var inps = document.querySelectorAll("input")
+        
+    //     for (let q=0; q<inps.length; ++q) {
+    //       if (inps[q].name && inps[q].form === this) {
+    //         if(inps[q].name == 'form-title'){
+    //             data[id-1].title = inps[q].value
+    //         } 
+    //         if(inps[q].name == 'form-body'){
+    //             data[id-1].body = inps[q].value
+    //         }
+    //       }
+    //     }
+    //     render();
+    //   })
+  }
+
+  
+
+  function modifyPost(id){
+
+
   }
   
   span.onclick = function() {
@@ -12,17 +38,7 @@ function openModal(id) {
 
   }
 
-  document.getElementById('MyForm').addEventListener('submit', function (e) {
-    e.preventDefault()
   
-    var inps = document.querySelectorAll("input, select, textarea")
-    
-    for (var q=0; q<inps.length; ++q) {
-      if (inps[q].name && inps[q].form === this) {
-        console.log("%s %s", inps[q].name, inps[q].value)
-      }
-    }
-  })
   
   document.addEventListener('click', function(e) {
     console.log(e.target.id);
