@@ -1,44 +1,65 @@
 var modal = document.getElementById('myModal');
 var btn = document.getElementById("btn");
 var span = document.getElementsByClassName("close")[0];
+info = document.getElementById("info");
+form = document.getElementById("modifyPost")
 
-function openModal(id) {
-    document.querySelector(".postTitle").innerHTML = data[id-1].title
-    document.querySelector(".postBody").innerHTML = data[id-1].body
-    modal.style.display = "block";
+form.addEventListener('submit', modifyPost)
+
+
+function clearList() {
+    while (info.firstChild) {
+        info.removeChild(info.firstChild);
+    }
+}
+
+async function openModal(el, action) {
     
-    // document.getElementById('MyForm').addEventListener('submit', function (e) {
-    //     e.preventDefault()
-      
-    //     var inps = document.querySelectorAll("input")
-        
-    //     for (let q=0; q<inps.length; ++q) {
-    //       if (inps[q].name && inps[q].form === this) {
-    //         if(inps[q].name == 'form-title'){
-    //             data[id-1].title = inps[q].value
-    //         } 
-    //         if(inps[q].name == 'form-body'){
-    //             data[id-1].body = inps[q].value
-    //         }
-    //       }
-    //     }
-    //     render();
-    //   })
+    document.querySelector("#action").innerHTML = `You're about to ${action} post`
+    if(el){
+        localStorage.setItem('btn-id', el.id-1)
+        document.querySelector(".postTitle").innerHTML = data[el.id-1].title
+        document.querySelector(".postBody").innerHTML = data[el.id-1].body
+    }
+    
+    modal.style.display = "block";
   }
-
   
 
-  function modifyPost(id){
+addPost = () => {
+    openModal('','add')
+}
+function modifyPost(e){
+    e.preventDefault();
 
+    const fields = document.querySelectorAll('input')
+    const values = {};
+    fields.forEach(field => {
+        const {name, value} = field;
+        values[name] = value; 
+    })
 
-  }
+    let id = localStorage.getItem('btn-id')
+
+    data[id].body = values['form-body']
+    data[id].title = values['form-title']
+
+    clearList()
+
+    render()
+
+    form.reset()
+    modal.style.display = "none";
+    
+    console.log(data[id])
+    
+
+}
   
   span.onclick = function() {
     modal.style.display = "none";
 
   }
-
-  
   
   document.addEventListener('click', function(e) {
     console.log(e.target.id);
@@ -61,16 +82,41 @@ async function fetchData(type) {
 var data;
 
 async function render(){
-    typeof(data) !== 'undefined' ? render() : data = await fetchData('posts');
-    console.log(data)
-    data.forEach(el => {
-        document.querySelector("#info").insertAdjacentHTML('afterbegin', 
-            `<div class="post">
-                <div class="title">${el.title}</div>
-                <div id="postBody">${el.body}</div>
-                </div>
-                <button onclick="openModal(${el.id})" class="btn" id="${el.id}">Редактировать пост</button>
-                <hr>`
-                );
-        });
+    clearList()
+    addbtn = document.createElement('button')
+    addbtn.innerHTML = 'Add Post'
+
+    info.appendChild(addbtn)
+
+    if(data){
+        data.forEach(el => {
+            item = document.createElement('div')
+            title = document.createElement('p')
+            body = document.createElement('p')
+            modifyButton = document.createElement('button')
+    
+            item.setAttribute('class', 'post')
+    
+            title.setAttribute('class', 'postTitle')
+            body.setAttribute('class', 'postBody')
+            modifyButton.setAttribute('onclick', "openModal(this, 'modify')")
+            
+    
+            modifyButton.id = el.id
+            title.innerHTML = el.title
+            body.innerHTML = el.body
+            modifyButton.innerHTML = 'Modify Post'
+    
+    
+            item.appendChild(title)
+            item.appendChild(body)
+            item.appendChild(modifyButton)
+            info.appendChild(item)
+    })
+    }
+    else{
+        data = await fetchData('posts');
+        render()
+}
+
 }

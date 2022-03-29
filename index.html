@@ -13,11 +13,11 @@
                 <div class="modal-header">
                   <span class="close">×</span>
                 </div>
-                <div>You're about to modify post with title and body:</div>
+                <div id="action"></div>
                 <div class="postTitle"></div>
                 <div class="postBody"></div>
                 <div class="modal-body">
-                    <form id="MyForm" name="my-form">
+                    <form id="modifyPost" name="modify-post">
                         <input type="text" placeholder="New title" name="form-title">
                         <input type="text" placeholder="New body" name="form-body">
                         <input type="submit">
@@ -25,7 +25,10 @@
                 </div>
                 </div>
               </div></div>
-        <div id="info"></div>
+        <div id="info">
+          <div> Click Posts to show all posts and add them, click Albums to get all Albums </div>
+          
+        </div>
 
         <script src="./script.js"></script>
         <link rel="stylesheet" href="./style.css"
