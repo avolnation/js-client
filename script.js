@@ -4,7 +4,11 @@ var span = document.getElementsByClassName("close")[0];
 info = document.getElementById("info");
 form = document.getElementById("modifyPost")
 
-form.addEventListener('submit', (e) => modifyPost(e))
+form.addEventListener('submit', (e) => {
+    let lsAction = localStorage.getItem('action');
+    if(lsAction == 'add'){addPost(e)}
+    if(lsAction == 'modify'){modifyPost(e)}
+});
 
 
 //Deleting all child elements before we re-render them 
@@ -15,7 +19,7 @@ function clearList() {
 }
 
 openModal = (el, action) => {
-    
+    localStorage.setItem('action', action)
     document.querySelector("#action").innerHTML = `You're about to ${action} post`
     if(el){
         localStorage.setItem('btn-id', el.id-1)
@@ -27,9 +31,22 @@ openModal = (el, action) => {
   }
   
 
-addPost = () => {
-    openModal('','add')
-
+addPost = (e) => {
+    e.preventDefault();
+    const fields = document.querySelectorAll('input')
+    const values = {};
+    fields.forEach(field => {
+        const {name, value} = field;
+        values[name] = value; 
+    })
+    data.push({id: data.length + 1, body: values['form-body'], title: values['form-title']})
+    
+        clearList()
+    
+        render()
+    
+        form.reset()
+        modal.style.display = "none";
 }
 
 modifyPost = (e) => {
@@ -56,14 +73,18 @@ modifyPost = (e) => {
         render()
     
         form.reset()
+        resetPosts();
         modal.style.display = "none";
     
 }
-  
+    resetPosts = () => {
+        document.querySelector(".postTitle").innerHTML = ''
+        document.querySelector(".postBody").innerHTML = ''
+    }
+
   span.onclick = function() {
     modal.style.display = "none";
-    document.querySelector(".postTitle").innerHTML = ''
-    document.querySelector(".postBody").innerHTML = ''
+    resetPosts();
 
   }
   
@@ -95,6 +116,7 @@ async function render(){
     addTaskBtn.onclick = () => openModal( 0 , 'add')
     info.appendChild(addTaskBtn)
 
+    console.log(data)
 
     if(data){
         data.forEach(el => {
@@ -103,8 +125,9 @@ async function render(){
             title = document.createElement('p')
             body = document.createElement('p')
             modifyButton = document.createElement('button')
-    
+                
             item.setAttribute('class', 'post')
+            item.setAttribute('style', 'border-color: #fffff')
     
             title.setAttribute('class', 'postTitle')
             body.setAttribute('class', 'postBody')
