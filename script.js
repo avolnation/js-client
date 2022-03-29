@@ -4,16 +4,17 @@ var span = document.getElementsByClassName("close")[0];
 info = document.getElementById("info");
 form = document.getElementById("modifyPost")
 
-form.addEventListener('submit', modifyPost)
+form.addEventListener('submit', (e) => modifyPost(e))
 
 
+//Deleting all child elements before we re-render them 
 function clearList() {
     while (info.firstChild) {
         info.removeChild(info.firstChild);
     }
 }
 
-async function openModal(el, action) {
+openModal = (el, action) => {
     
     document.querySelector("#action").innerHTML = `You're about to ${action} post`
     if(el){
@@ -28,8 +29,11 @@ async function openModal(el, action) {
 
 addPost = () => {
     openModal('','add')
+
 }
-function modifyPost(e){
+
+modifyPost = (e) => {
+
     e.preventDefault();
 
     const fields = document.querySelectorAll('input')
@@ -41,23 +45,25 @@ function modifyPost(e){
 
     let id = localStorage.getItem('btn-id')
 
-    data[id].body = values['form-body']
-    data[id].title = values['form-title']
+    console.log(e)
 
-    clearList()
-
-    render()
-
-    form.reset()
-    modal.style.display = "none";
     
-    console.log(data[id])
+        data[id].body = values['form-body']
+        data[id].title = values['form-title']
     
-
+        clearList()
+    
+        render()
+    
+        form.reset()
+        modal.style.display = "none";
+    
 }
   
   span.onclick = function() {
     modal.style.display = "none";
+    document.querySelector(".postTitle").innerHTML = ''
+    document.querySelector(".postBody").innerHTML = ''
 
   }
   
@@ -73,6 +79,7 @@ async function fetchData(type) {
             credentials: 'same-origin'
         });
         const data = await response.json();
+        console.log(data)
         return data;
     } catch (error) {
         console.error(error);
@@ -83,13 +90,15 @@ var data;
 
 async function render(){
     clearList()
-    addbtn = document.createElement('button')
-    addbtn.innerHTML = 'Add Post'
+    addTaskBtn = document.createElement('button')
+    addTaskBtn.innerHTML = 'Add Post'
+    addTaskBtn.onclick = () => openModal( 0 , 'add')
+    info.appendChild(addTaskBtn)
 
-    info.appendChild(addbtn)
 
     if(data){
         data.forEach(el => {
+            if(el.body && el.title){
             item = document.createElement('div')
             title = document.createElement('p')
             body = document.createElement('p')
@@ -107,11 +116,13 @@ async function render(){
             body.innerHTML = el.body
             modifyButton.innerHTML = 'Modify Post'
     
-    
-            item.appendChild(title)
-            item.appendChild(body)
-            item.appendChild(modifyButton)
-            info.appendChild(item)
+            
+                item.appendChild(title)
+                item.appendChild(body)
+                item.appendChild(modifyButton)
+                info.appendChild(item)
+            }
+            
     })
     }
     else{
