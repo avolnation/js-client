@@ -32,7 +32,7 @@ ul {
 }
 .modal {
     display: none;
-    position: absolute;
+    position: fixed;
     margin: auto;
     top: 0;
     bottom: 0;
@@ -63,5 +63,18 @@ ul {
 
   input{
       display: block;
+  }
+  .post{
+    border: 2px solid; border-color: black; border-radius: 5px; margin-bottom: 5px; width: 49%; 
+  }
+
+  p{
+    width: 90%;
+    height: fit-content;
+  }
+  #info-filling{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
   
