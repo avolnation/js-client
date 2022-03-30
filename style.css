@@ -77,4 +77,9 @@ ul {
     flex-wrap: wrap;
     justify-content: space-around;
   }
+
+  .comment{
+    border: 1px solid;
+    border-color: black;
+  }
   
