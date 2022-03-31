@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>Posts</title>
+        <link type="text/css" rel="stylesheet" href="style.css">
+        <script src="./generateNavBar.js" defer></script>
+        <script src="/scripts/navBarListeners.js" defer></script>
+    </head>
+    <body>
+      <script type="module" src="./script.js" defer></script>
+        <header>
+        </header>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <span class="close">×</span>
+                </div>
+                <div id="action"></div>
+                <div class="postTitle"></div>
+                <div class="postBody"></div>
+                <div class="modal-body">
+                    <form id="modifyPost" name="modify-post">
+                        <input type="text" placeholder="New title/name" name="form-title">
+                        <input type="text" placeholder="New body" name="form-body">
+                        <input type="submit">
+                      </form>
+                </div>
+                </div>
+              </div></div>
+        <div id="info">
+          <div id="info-filling">
+            <div> Click Posts to show all posts and add them, click Albums to get all Albums </div>
+          </div>
+        </div>
+    </body>
+</html>

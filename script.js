@@ -1,182 +1,239 @@
 var data = [];
-var commentsData;
-modal = document.getElementById('myModal');
-btn = document.getElementById("btn");
-span = document.getElementsByClassName("close")[0];
-info = document.getElementById("info-filling");
-form = document.getElementById("modifyPost");
-posts = document.getElementById("posts");
-inf = document.getElementById("info");
+var commentsData = new Map();
+let modal = document.getElementById('myModal');
+let btn = document.getElementById("btn");
+let span = document.getElementsByClassName("close")[0];
+let info = document.getElementById("info-filling");
+let form = document.getElementById("modifyPost");
+let posts = document.getElementById("posts");
+let inf = document.getElementById("info");
+
+window.addEventListener("load", async function () {
+    console.log("All resources finished loading!");
+    addNavButtons();
+});
 
 
-addComment = (e) => {
+let addComment = (e, ...args) => {
     e.preventDefault();
+    console.log(args[0])
     let id = localStorage.getItem('btn-id')
+    console.log(id)
+    let commsId = parseInt(id.match(/\d+/));
+    e.preventDefault();
     let values = getValuesFromModal();
-    commentsData.push({postId: id + 1, id: commentsData.length, body: values['form-body'], name: values['form-title']})
-        commentsDiv = document.querySelector(`.comments-${id}`)
-        console.log(id)
-        console.log(commentsDiv)
+    if(commentsData.has(commsId)){
+        map.set(commsId ,map.get(commsId).push({
+            postId: commsId,
+            id: commentsData.length,
+            body: values['form-body'],
+            name: values['form-title']
+        }))}
+        else{
+            map.set(commsId, [{postId: commsId,
+                id: commentsData.length,
+                body: values['form-body'],
+                name: values['form-title']}]
+            )
+        }
+    let commentsDiv = document.querySelector(`div#${id}`)
+    // console.log(id)
+    console.log(commentsDiv)
+    clearList(commentsDiv)
+    showComments(e)
+    // clearList(document.querySelector(`.comments-${id}`))
 
-        showComments(id)
-        // clearList(document.querySelector(`.comments-${id}`))
-
-        form.reset()
-        modal.style.display = "none";
+    form.reset()
+    modal.style.display = "none";
 
 
 }
 
-showComments = async (e) => {
+let showComments = async (e) => {
+    let eId = e.target.id;
 
-    comms = document.querySelector(`.comments-${e.id}`)
-    if(commentsData){
-        clearList(document.querySelector(`.comments-${e.id}`))
+    let id = parseInt(eId.match(/\d+/))
+
+    // console.log(e)
+    // console.log(e.id)
+    let comms = document.querySelector(`div#${eId}`)
+    clearList(comms)
+    console.log(comms)
+    let p = document.createElement('p')
+    let addCommentButton = document.createElement('button')
+    p.innerHTML = 'Comments:'
+
+    addCommentButton.addEventListener('click', (e) => openModal(e, 'add comment to'))
+    addCommentButton.setAttribute('id', `${eId}`)
+    addCommentButton.innerHTML = 'Add Comment'
+
+    comms.appendChild(p)
+
+    if (commentsData) {
         // console.log(commentsData)
         // console.log(e)
         // console.log(info)
-        
-        // console.log(e.id)
-        p = document.createElement('p')
-        addCommentButton = document.createElement('button')
-        p.innerHTML = 'Comments:'
-        
-            addCommentButton.setAttribute('onclick', "openModal(this, 'add comment to')")
-            addCommentButton.setAttribute('id', `${e.id}`)
-            addCommentButton.innerHTML = 'Add Comment'
 
-        comms.appendChild(p)
-        
-        
+        // console.log(e.id)
+
+
+        console.log(parseInt(eId.match(/\d+/)))
+
         commentsData.forEach(el => {
             // console.log(e.id)
             // console.log(el.postId)
-            if(e.id + 1 == el.postId){
-            div = document.createElement('div')
-            commentName = document.createElement('p')
-            commentBody = document.createElement('p')
+            if (id == el.postId) {
+                let div = document.createElement('div')
+                let commentName = document.createElement('p')
+                let commentBody = document.createElement('p')
 
 
-            div.setAttribute('class', 'comment')
-            commentName.innerHTML = el.name
-            commentName.setAttribute('style', 'font-weight: bold;')
-            commentBody.innerHTML = el.body
+                div.setAttribute('class', 'comment')
+                commentName.innerHTML = el.name
+                commentName.setAttribute('style', 'font-weight: bold;')
+                commentBody.innerHTML = el.body
 
-            div.appendChild(commentName)
-            div.appendChild(commentBody)
+                div.appendChild(commentName)
+                div.appendChild(commentBody)
 
 
-            comms.appendChild(div)}})
-            comms.appendChild(addCommentButton)
-    }        
-    else{
+                comms.appendChild(div)
+            }
+        })
+        comms.appendChild(addCommentButton)
+    } else {
+        clearList(comms)
         comms.innerHTML = 'Waiting for server response'
-        commentsData = await fetchData('comments');
-        comms.innerHTML = ''
-        showComments(e)
+        let commentsForParticularPost = await fetchData(`comments?postId=${id}`);
+        console.log(commentsForParticularPost)
+        if (commentsForParticularPost.length) {
+            commentsData = [...commentsData, ...commentsForParticularPost]
+            console.log(commentsData)
+            comms.innerHTML = ''
+            showComments(e)
+        }
+        // comms.innerHTML = 'No data, from server'
+        // showComments(e)
     }
-    
-    
 }
-
-    
 
 form.addEventListener('submit', (e) => {
     let lsAction = localStorage.getItem('action');
-    if(lsAction == 'add'){addPost(e)}
-    if(lsAction == 'modify'){modifyPost(e)}
-    if(lsAction == 'add comment to'){addComment(e)}
+    if (lsAction == 'add') {
+        addPost(e)
+    }
+    if (lsAction == 'modify') {
+        modifyPost(e)
+    }
+    if (lsAction == 'add comment to') {
+        addComment(e, e.target.id)
+    }
 });
 
-posts.addEventListener('click', () => {
-    addPostBtn(); 
-})
+// posts.addEventListener('click', () => {
+//     addPostBtn(); 
+// })
 
 //Deleting all child elements before we re-render them 
 function clearList(elToClear) {
+    console.log(elToClear)
     while (elToClear.firstChild) {
         elToClear.removeChild(elToClear.firstChild);
     }
 }
 
-openModal = (el, action) => {
+let openModal = (el, action) => {
     // console.log(el.id)
     localStorage.setItem('action', action)
     document.querySelector("#action").innerHTML = `You're about to ${action} post`
-    localStorage.setItem('btn-id', el.id)
-    if(action == 'modify'){
+    if (action == 'modify') {
         // console.log(data[el])
-        localStorage.setItem('btn-id', el.id)
-        document.querySelector(".postTitle").innerHTML = data[el.id].title
-        document.querySelector(".postBody").innerHTML = data[el.id].body
+        document.querySelector(".postTitle").innerHTML = data[el.target.id].title
+        document.querySelector(".postBody").innerHTML = data[el.target.id].body
     }
-    
+    localStorage.setItem('btn-id', el.target.id)
+
     modal.style.display = "block";
-  }
-  
-getValuesFromModal = () => {
+}
+
+let getValuesFromModal = () => {
     const fields = document.querySelectorAll('input')
     const values = {};
     fields.forEach(field => {
-        const {name, value} = field;
-        values[name] = value; 
+        const {
+            name,
+            value
+        } = field;
+        values[name] = value;
     })
     return values;
 }
 
-addPost = (e) => {
+let addPost = (e) => {
     e.preventDefault();
     const values = getValuesFromModal();
-    data.push({id: data.length + 1, body: values['form-body'], title: values['form-title']})
-    
-        clearList(info)
-    
-        render()
-    
-        form.reset()
-        modal.style.display = "none";
+    data.push({
+        id: data.length,
+        body: values['form-body'],
+        title: values['form-title']
+    })
+
+    clearList(info)
+
+    render()
+
+    form.reset()
+    modal.style.display = "none";
 }
 
-modifyPost = (e) => {
+let modifyPost = (e) => {
 
     e.preventDefault();
 
     const fields = document.querySelectorAll('input')
     const values = {};
     fields.forEach(field => {
-        const {name, value} = field;
-        values[name] = value; 
+        const {
+            name,
+            value
+        } = field;
+        values[name] = value;
     })
 
     let id = localStorage.getItem('btn-id')
 
     console.log(e)
 
-    
-        data[id].body = values['form-body']
-        data[id].title = values['form-title']
-    
-        clearList(info)
-    
-        render()
-    
-        form.reset()
-        resetPosts();
-        modal.style.display = "none";
-    
+    data.forEach(el => {
+        if (el.id == id) {
+            el.body = values['form-body']
+            el.title = values['form-title']
+        }
+    })
+
+
+    clearList(info)
+
+    render()
+
+    form.reset()
+    resetPosts();
+    modal.style.display = "none";
+
 }
-resetPosts = () => {
+let resetPosts = () => {
     document.querySelector(".postTitle").innerHTML = ''
     document.querySelector(".postBody").innerHTML = ''
 }
 
-span.onclick = function() {
+span.onclick = function () {
     modal.style.display = "none";
+    form.reset();
     resetPosts();
 
 }
-  
-document.addEventListener('click', function(e) {
+
+document.addEventListener('click', function (e) {
     console.log(e.target.id);
 })
 
@@ -192,33 +249,35 @@ async function fetchData(type) {
         return data;
     } catch (error) {
         console.error(error);
+        return error
     }
 }
 
-addPostBtn = () => {
+let addNavButtons = () => {
     // clearList(inf)
 
-    addTaskBtn = document.createElement('button')
+    let addTaskBtn = document.createElement('button')
     addTaskBtn.innerHTML = 'Add Post'
-    addTaskBtn.onclick = () => openModal( 0 , 'add')
-    fetchPostsBtn = document.createElement('button')
+    addTaskBtn.onclick = () => openModal(0, 'add')
+
+    let fetchPostsBtn = document.createElement('button')
     fetchPostsBtn.innerHTML = 'Fetch posts'
     fetchPostsBtn.onclick = async () => {
-        let dataFromFetch =  await fetchData('posts');
+        let dataFromFetch = await fetchData('posts');
         data = [...data, ...dataFromFetch];
         render()
     }
 
-    input = document.createElement('input')
+    let input = document.createElement('input')
     input.innerHTML = 'Search for posts'
     input.setAttribute('id', 'search')
     input.setAttribute('type', 'text')
 
-    inf.insertBefore(addTaskBtn,info)
-    inf.insertBefore(fetchPostsBtn,info)
-    inf.insertBefore(input,info)
+    inf.insertBefore(addTaskBtn, info)
+    inf.insertBefore(fetchPostsBtn, info)
+    inf.insertBefore(input, info)
 
-    search = document.getElementById("search");
+    let search = document.getElementById("search");
 
     search.addEventListener("change", (e) => {
         data = data.filter(el => el.title.includes(e.target.value))
@@ -227,56 +286,63 @@ addPostBtn = () => {
 
 }
 
-async function render(){
+async function render() {
     clearList(info)
-    
+
     // console.log(data)
 
-    if(data){
-        data.forEach((el, index) => {
+    if (data) {
+        data.forEach(el => {
 
-            if(el.body && el.title){
-            item = document.createElement('div')
-            title = document.createElement('p')
-            body = document.createElement('p')
-            modifyButton = document.createElement('button')
-            showCommentsButton = document.createElement('button')
-            comments = document.createElement('div')
+            if (el.body && el.title) {
+                let item = document.createElement('div')
+                let title = document.createElement('p')
+                let body = document.createElement('p')
+                let modifyButton = document.createElement('button')
+                let showCommentsButton = document.createElement('button')
+                let comments = document.createElement('div')
 
                 item.setAttribute('class', 'post')
                 title.setAttribute('class', 'postTitle')
                 body.setAttribute('class', 'postBody')
-                modifyButton.setAttribute('onclick', "openModal(this, 'modify')")
-                showCommentsButton.setAttribute('onclick', "showComments(this)")
-                comments.setAttribute('class', `comments-${index}`)
-            
-            
-    
-            modifyButton.id = index
-            showCommentsButton.id = index
+                modifyButton.setAttribute('class', 'modify-button')
+                modifyButton.addEventListener('click', (e) => openModal(e, 'modify'))
+                showCommentsButton.addEventListener('click', (e) => showComments(e))
+                showCommentsButton.className = 'show-comments'
+                comments.setAttribute('id', `comments-${el.id}`)
+
+
+
+                modifyButton.id = el.id
+                showCommentsButton.id = `comments-${el.id}`
+
 
                 title.innerHTML = el.title
                 body.innerHTML = el.body
                 modifyButton.innerHTML = 'Modify Post'
                 showCommentsButton.innerHTML = 'Show comments'
-            
-    
-            
-            item.appendChild(title)
-            item.appendChild(body)
-            item.appendChild(modifyButton)
-            item.appendChild(showCommentsButton)
-            item.appendChild(comments)
-            info.appendChild(item)
+
+
+
+                item.appendChild(title)
+                item.appendChild(body)
+                item.appendChild(modifyButton)
+                item.appendChild(showCommentsButton)
+                item.appendChild(comments)
+                info.appendChild(item)
 
                 // item.setAttribute("style", "border: 2px solid; border-color: black; border-radius: 5px;")
             }
-            
-    })
-    }
-    else{
+
+        })
+    } else {
         data = await fetchData('posts');
         render()
+    }
+
 }
 
+export {
+    fetchData,
+    clearList
 }

@@ -8,6 +8,7 @@ let allAlbums = document.querySelector("#all-albums")
 let modal = document.getElementById('myModal');
 let search = document.querySelector("#filterAlbums")
 let bodie = document.querySelector('.modal-body')
+bodie.setAttribute('style', 'display: flex; flex-wrap: wrap;width: fit-content;overflow-y: auto;height: 500px;width: 750;z-index: 1000; justify-content: center; padding-top: 10px;')
 
 var Albums;
 
@@ -62,7 +63,12 @@ window.addEventListener("click", (e) => {
   }
 })
 
+let bodyOverflowStyle = (x) => {
+  document.querySelector('body').setAttribute('style', `overflow: ${x};`)
+}
+
 let openModal = async (id) => {
+  bodyOverflowStyle('hidden');
   let photos = await fetchData(`albums/${id}/photos`)
 
   modal.style.display = "block";
@@ -89,4 +95,5 @@ let openModal = async (id) => {
 span.onclick = function() {
   modal.style.display = "none";
   clearList(bodie)
+  bodyOverflowStyle('auto')
 }
