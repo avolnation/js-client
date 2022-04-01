@@ -1,7 +1,7 @@
 import {
   fetchData,
   clearList
-} from "./functions.js"
+} from "../functions.js"
 
 let span = document.getElementsByClassName("close")[0];
 let allAlbums = document.querySelector("#all-albums")
@@ -12,22 +12,23 @@ bodie.setAttribute('style', 'display: flex; flex-wrap: wrap;width: fit-content;o
 
 var Albums;
 
-
+//* Поиск по альбому
 search.addEventListener("input", (e) => {
   let filteredArray = Albums.filter(el => el.title.includes(e.target.value));
-  console.log(filteredArray)
-  console.log(e.target.value)
+  // console.log(filteredArray)
+  // console.log(e.target.value)
   clearList(allAlbums)
   render(filteredArray)
 })
 
+//* Получение информации ри загрузке страницы 
 window.addEventListener("load", async function () {
-  console.log("All resources finished loading!");
+  // console.log("All resources finished loading!");
   Albums = await fetchData('albums')
   render(Albums)
 });
 
-
+//* Рендер(ре-рендер) переданного объекта
 let render = async (a) => {
 
   if (a) {
@@ -49,24 +50,24 @@ let render = async (a) => {
       allAlbums.appendChild(item)
 
     })
-    // } else {
-    //   Albums = await fetchData('Albums');
-    //   render()
-    // }
   }
 }
+
+//* По клику открываем модальное окно
 window.addEventListener("click", (e) => {
-  console.log(e.target.id)
-  console.log(e.target.className)
+  // console.log(e.target.id)
+  // console.log(e.target.className)
   if(e.target.className == 'album' && e.target.id){
     openModal(e.target.id)
   }
 })
 
+//* Скрытие, показ overflow
 let bodyOverflowStyle = (x) => {
   document.querySelector('body').setAttribute('style', `overflow: ${x};`)
 }
 
+//* Открытие модального окна
 let openModal = async (id) => {
   bodyOverflowStyle('hidden');
   let photos = await fetchData(`albums/${id}/photos`)
@@ -91,7 +92,7 @@ let openModal = async (id) => {
   })
 
 }
-
+//* Закрытие модального окна по нажатию
 span.onclick = function() {
   modal.style.display = "none";
   clearList(bodie)

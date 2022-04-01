@@ -35,11 +35,29 @@ li span:hover {
 .header {
   display: inline;
 }
+button{
+  height: fit-content;
+  font-family: "Google Sans";
+  font-size: larger;
+  background-color: white;
+  border: black 2px solid;
+  border-radius: 10px;
 
-.navButtons {
-  display: inline;
 }
-
+button:hover{
+  cursor: pointer;
+}
+.navButton {
+  height: fit-content;
+  font-family: "Google Sans";
+  font-size: larger;
+  background-color: white;
+  border: black 2px solid;
+  border-radius: 10px;
+}
+.navButton:hover{
+  cursor: pointer;
+}
 .modal {
   display: none;
   position: fixed;
@@ -77,8 +95,6 @@ li span:hover {
 }
 
 .close {
-  display: flex;
-  justify-content: flex-end;
   font-size: 30px;
   font-weight: bold;
 }
@@ -98,12 +114,24 @@ input {
   margin-bottom: 5px;
   width: 49%;
 }
-
+.postTitle{
+  font-weight: bold;
+}
+div.postTitle{
+  max-width: 500px;
+}
+div.postBody{
+  max-width: 500px;
+}
 p {
   width: 90%;
   height: fit-content;
 }
-
+#info{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 #info-filling {
   display: flex;
   flex-wrap: wrap;
@@ -113,8 +141,17 @@ p {
 }
 
 .comment {
-  border: 1px solid;
-  border-color: black;
+  background-color: #F9F8F8;
+  border: 5px solid;
+  border-radius: 10px;
+  border-color: #474044;
+  width: 90%;
+  margin: 5px;
+}
+.comments{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 img {
@@ -156,7 +193,7 @@ p {
   font-family: 'Roboto', sans-serif;
   color: #333;
   font-size: 1.2rem;
-  margin: 0 auto;
+  margin: 5px; 
   padding: 1.5rem 2rem;
   border-radius: 0.2rem;
   background-color: rgb(255, 255, 255);
@@ -168,6 +205,12 @@ p {
 }
 
 #information {
+  display: flex;
+  justify-content: center;
+}
+
+.actionButtons{
+  margin: 5px;
   display: flex;
   justify-content: center;
 }
