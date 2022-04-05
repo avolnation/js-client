@@ -4,6 +4,27 @@ body {
   box-sizing: border-box;
   margin: 0;
 }
+body{
+  background-color: #ece6cd;
+}
+
+/* Buttons, inputs does not inherit font-family */
+button,
+input {
+  font-family: "Google Sans";
+  height: 50%;
+  color: #424242;
+  background-color: #DBDBDB;
+  margin-bottom: 2%;
+  border-radius: 5px;
+  border-style: ridge;
+  border: none;
+  box-shadow: rgb(0 17 51 / 30%) 0px 3px 15px;
+}
+
+input:hover{
+  cursor: pointer;
+}
 
 ul {
   display: flex;
@@ -69,8 +90,8 @@ button:hover {
   right: 0;
   background-color: gainsboro;
   padding: 0.7em;
-  width: 70%;
-  height: 80%;
+  width: 40%;
+  height: 45%;
   border-radius: 20px;
   box-shadow: 2px 1px 10px 0px #424242;
   overflow: auto;
@@ -95,7 +116,6 @@ button:hover {
 }
 
 .close {
-  position: fixed;
   font-size: 30px;
   font-weight: bold;
 }
@@ -109,6 +129,7 @@ input {
 }
 
 .post {
+  background-color: #f9ac67;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -118,23 +139,16 @@ input {
   border-radius: 5px;
   margin-bottom: 5px;
   width: 49%;
+  box-shadow: rgb(0 17 51 / 30%) 0px 3px 15px;
 }
 
 .post-title {
   font-weight: bold;
 }
 
-div.post-title {
-  max-width: 50%;
-}
-
-div.post-body {
-  max-width: 50%;
-}
-
 p {
   text-align: center;
-  margin: 3%;
+  margin: 1%;
   width: 90%;
   height: fit-content;
 }
@@ -142,6 +156,7 @@ p {
 .info {
   margin: 1%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -154,61 +169,15 @@ p {
   align-items: center;
 }
 
-img {
-  margin: 1%;
-  width: 50%;
-  height: 50%;
-}
-
-.all-albums {
+.modal-body {
+  text-align: center;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.modal-body .album {
-  background-color: honeydew;
-  display: flex;
-  margin: 0.5%;
-  padding: 0.5%;
-  width: 200px;
-  height: 200px;
-  border: 3px solid;
-  border-radius: 10px;
-  justify-content: center;
-  box-shadow: 5px 4px 79px -31px rgb(34 60 80 / 20%);
-  transition: all .5s ease-in-out;
-  flex-direction: column;
-  align-items: center;
-}
-
-.modal-body img {
-  margin: 1%;
-  width: 50%;
-}
-
-.modal-body p {
-  font-size: 0.9em;
-}
-
-.album {
-  background-color: honeydew;
-  display: flex;
-  margin: 0.5%;
-  padding: 0.5%;
-  width: 200px;
-  border: 3px solid;
-  border-radius: 10px;
-  justify-content: center;
-  box-shadow: 5px 4px 79px -31px rgb(34 60 80 / 20%);
-  transition: all .5s ease-in-out;
-  flex-direction: column;
-  align-items: center;
-}
-
-.album:hover {
-  cursor: pointer;
-  transform: scale(1.1);
+form {
+  margin: 2%;
 }
 
 .form-input {
@@ -233,5 +202,21 @@ img {
 .action-buttons {
   margin: 5px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+}
+
+.comments {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.comment {
+  background-color: #F9F8F8;
+  border: 5px solid;
+  border-radius: 10px;
+  border-color: #474044;
+  width: 90%;
+  margin: 5px;
 }

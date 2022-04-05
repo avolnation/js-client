@@ -9,7 +9,7 @@ async function fetchData(type) {
         console.log(data)
         return data;
     } catch (error) {
-        console.log(error);
+        console.log(typeof error);
         return error
     }
 }

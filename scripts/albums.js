@@ -58,7 +58,7 @@ let albumItem = (id, elementTitle) => {
 window.addEventListener("click", (e) => {
   // console.log(e.target.id)
   // console.log(e.target.className)
-  if(e.target.className == 'album' && e.target.id){
+  if (e.target.className == 'album' && e.target.id) {
     openModal(e.target.id)
   }
 })
@@ -70,20 +70,20 @@ let bodyOverflowStyle = (x) => {
 
 //* View 
 let albumPhotos = (id, url, elementTitle) => {
-    let item = document.createElement('div')
-    let title = document.createElement('p')
-    let photoFromAlbum = document.createElement('img')
+  let item = document.createElement('div')
+  let title = document.createElement('p')
+  let photoFromAlbum = document.createElement('img')
 
-      item.setAttribute('id', id)
-      item.setAttribute('class', 'album')
-      photoFromAlbum.setAttribute('src', `${url}`)
-      title.setAttribute('style', 'margin: 0;')
+  item.setAttribute('id', id)
+  item.setAttribute('class', 'album')
+  photoFromAlbum.setAttribute('src', `${url}`)
+  title.setAttribute('style', 'margin: 0;')
 
-      title.innerHTML = elementTitle
+  title.innerHTML = elementTitle
 
-      item.appendChild(photoFromAlbum)
-      item.appendChild(title)
-      bodie.appendChild(item)
+  item.appendChild(photoFromAlbum)
+  item.appendChild(title)
+  bodie.appendChild(item)
 }
 
 //* Modal generator
@@ -98,21 +98,21 @@ let openModal = async (id) => {
     let title = document.createElement('p')
     let photoFromAlbum = document.createElement('img')
 
-      item.setAttribute('id', el.id)
-      item.setAttribute('class', 'album')
-      photoFromAlbum.setAttribute('src', `${el.url}`)
-      title.setAttribute('style', 'margin: 0;')
+    item.setAttribute('id', el.id)
+    item.setAttribute('class', 'album')
+    photoFromAlbum.setAttribute('src', `${el.url}`)
+    title.setAttribute('style', 'margin: 0;')
 
-      title.innerHTML = el.title
+    title.innerHTML = el.title
 
-      item.appendChild(photoFromAlbum)
-      item.appendChild(title)
-      bodie.appendChild(item)
+    item.appendChild(photoFromAlbum)
+    item.appendChild(title)
+    bodie.appendChild(item)
   })
 
 }
 //* Close modal on click
-span.onclick = function() {
+span.onclick = function () {
   modal.style.display = "none";
   clearList(bodie)
   bodyOverflowStyle('auto')

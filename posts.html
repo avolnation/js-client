@@ -3,7 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Posts</title>
-  <link type="text/css" rel="stylesheet" href="style.css">
+  <link type="text/css" rel="stylesheet" href="postsStyles.css">
   <script src="scripts/generateNavBar.js" defer></script>
   <script src="scripts/navBarListeners.js" defer></script>
   <script type="module" src="scripts/posts.js" defer></script>
@@ -19,10 +19,10 @@
       <div class="modal-header">
         <span class="close">×</span>
       </div>
-      <div id="action"></div>
-      <div class="postTitle"></div>
-      <div class="postBody"></div>
       <div class="modal-body">
+        <div id="action"></div>
+        <p class="post-title"></p>
+        <p class="post-body"></p>
         <form id="modifyPost" name="modify-post">
           <input type="text" placeholder="New title/name" name="form-title" required>
           <input type="text" placeholder="New body" name="form-body" required>
