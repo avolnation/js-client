@@ -10,4 +10,5 @@ After installation, run server in the same folder just by typing in console:
  http-server
 ```
 And go to any of addresses, that presented here:
+
 ![alt text](https://github.com/avolnation/js-client/blob/main/image.png?raw=true)
