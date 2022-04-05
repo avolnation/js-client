@@ -1,20 +1,25 @@
+import {
+    fetchData,
+    clearList
+  } from "./fetchData.js"
+
 var data = [];
 var commentsData = new Map();
 var postsFetched;
 
 let modal = document.getElementById('myModal');
 let span = document.getElementsByClassName("close")[0];
-let info = document.getElementById("info-filling");
+let info = document.getElementsByClassName("info-filling")[0];
 let form = document.getElementById("modifyPost");
-let inf = document.getElementById("info");
+let inf = document.getElementsByClassName("info")[0];
 
-//* При загрузке добавление навигационных кнопок
+//* Add nav bar on page load
 window.addEventListener("load", async function () {
     // console.log("All resources finished loading!");
     addNavButtons();
 });
 
-//* Добавление комментария
+//* Add comment to post
 let addComment = (e) => {
     e.preventDefault();
     let id = localStorage.getItem('btn-id')
@@ -54,7 +59,7 @@ let addComment = (e) => {
 
 }
 
-//* Рендер комментариев
+//* Comments render
 let renderComments = (id) => {
     let comms = document.querySelector(`div#comments-${id}`)
     let addCommentButton = document.createElement('button')
@@ -93,7 +98,7 @@ let renderComments = (id) => {
     comms.appendChild(addCommentButton)
 }
 
-//* Отображение комментариев
+//* Show comments
 let showComments = async (e) => {
     
     let eId = e.target.id;
@@ -137,7 +142,7 @@ let showComments = async (e) => {
     
 }
 
-//* Добавление слушателей события для модального окна
+//* Listeners for modal
 form.addEventListener('submit', (e) => {
     let lsAction = localStorage.getItem('action');
     if (lsAction == 'add') {
@@ -151,15 +156,8 @@ form.addEventListener('submit', (e) => {
     }
 });
 
-//* Удаление всех элементов в родителе перед ре-рендером
-function clearList(elToClear) {
-    // console.log(elToClear)
-    while (elToClear.firstChild) {
-        elToClear.removeChild(elToClear.firstChild);
-    }
-}
 
-//* Открытие модального окна
+//* Open modal
 let openModal = (el, action) => {
     // console.log(el.id)
     if(action == 'modify' || action =='add comment to'){
@@ -189,7 +187,7 @@ let openModal = (el, action) => {
     modal.style.display = "block";
 }
 
-//* Получение параметров из модального окна
+//* Get params from modal
 let getValuesFromModal = () => {
     const fields = document.querySelectorAll('input')
     const values = {};
@@ -203,7 +201,7 @@ let getValuesFromModal = () => {
     return values;
 }
 
-//* Добавление поста
+//* Add post
 let addPost = (e) => {
     e.preventDefault();
     const values = getValuesFromModal();
@@ -221,7 +219,7 @@ let addPost = (e) => {
     modal.style.display = "none";
 }
 
-//* Редактирование поста
+//* Modify post
 let modifyPost = (e) => {
 
     e.preventDefault();
@@ -257,11 +255,14 @@ let modifyPost = (e) => {
     modal.style.display = "none";
 
 }
+
+//* Reset data from modal after certain action
 let resetPosts = () => {
     document.querySelector(".postTitle").innerHTML = ''
     document.querySelector(".postBody").innerHTML = ''
 }
 
+//* Reset modal on click
 span.onclick = function () {
     modal.style.display = "none";
     form.reset();
@@ -269,28 +270,12 @@ span.onclick = function () {
 
 }
 
-//* Для тестирования
-// document.addEventListener('click', function (e) {
-//     console.log(e.target.id);
-// })
+//* For test purposes
+document.addEventListener('click', function (e) {
+    console.log(e);
+})
 
-//* Функция получения данных
-async function fetchData(type) {
-    try {
-        const response = await fetch(`https://jsonplaceholder.typicode.com/${type}`, {
-            method: 'GET',
-            credentials: 'same-origin'
-        });
-        const data = await response.json();
-        console.log(data)
-        return data;
-    } catch (error) {
-        console.error(error);
-        return error
-    }
-}
-
-//* Добавление навигационных кнопок
+//* Add nav buttons
 let addNavButtons = () => {
     // clearList(inf)
 
@@ -333,7 +318,7 @@ let addNavButtons = () => {
 
 }
 
-//* Рендер(ре-рендер) переданной информации
+//* Render(re-render) passed object
 async function render(data) {
     clearList(info)
 
@@ -392,9 +377,4 @@ async function render(data) {
         render(data)
     }
 
-}
-
-export {
-    fetchData,
-    clearList 
 }

@@ -1,5 +1,7 @@
-html {
+html, body {
   font-family: "Google Sans";
+  box-sizing: border-box;
+  margin: 0;
 }
 
 ul {
@@ -7,23 +9,19 @@ ul {
   justify-content: space-around;
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 1%;
   overflow: hidden;
   background-color: #333;
-  margin-bottom: 10px;
-}
-
-li {
-  float: left;
+  margin-bottom: 1%;
 }
 
 li span {
-  height: fit-content;
+  width: fit-content;
   display: block;
   color: white;
   text-align: center;
   align-items: center;
-  padding: 14px 16px;
+  padding: 15% 15%;
   text-decoration: none;
 }
 
@@ -32,17 +30,17 @@ li span:hover {
   background-color: #111;
 }
 
-.header {
+/* .header {
   display: inline;
-}
+} */
 button{
+  margin-right: 2%;
+  font-family: inherit;
   height: fit-content;
-  font-family: "Google Sans";
   font-size: larger;
   background-color: white;
   border: black 2px solid;
   border-radius: 10px;
-
 }
 button:hover{
   cursor: pointer;
@@ -69,11 +67,11 @@ button:hover{
   right: 0;
   background-color: gainsboro;
   padding: 0.7em;
-  max-height: fit-content;
-  max-width: fit-content;
+  width: 70%;
+  height: 80%;
   border-radius: 20px;
   box-shadow: 2px 1px 10px 0px #424242;
-  overflow: hidden;
+  overflow: auto;
   z-index: 1050;
 }
 
@@ -95,6 +93,7 @@ button:hover{
 }
 
 .close {
+  position: fixed;
   font-size: 30px;
   font-weight: bold;
 }
@@ -107,6 +106,9 @@ input {
 }
 
 .post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: 5px;
   border-style: double;
   border-color: black;
@@ -118,21 +120,24 @@ input {
   font-weight: bold;
 }
 div.postTitle{
-  max-width: 500px;
+  max-width: 50%;
 }
 div.postBody{
-  max-width: 500px;
+  max-width: 50%;
 }
 p {
+  text-align: center;
+  margin: 3%;
   width: 90%;
   height: fit-content;
 }
-#info{
+.info{
+  margin: 1%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#info-filling {
+.info-filling {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -155,29 +160,54 @@ p {
 }
 
 img {
-  max-width: 100px;
-  max-height: 100px;
+  margin: 1%;
+  width: 50%;
+  height: 50%;
 }
 
-#all-albums {
+.all-albums {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+.modal-body .album {
+    background-color: honeydew;
+    display: flex;
+    margin: 0.5%;
+    padding: 0.5%;
+    width: 200px;
+    height: 200px;
+    border: 3px solid;
+    border-radius: 10px;
+    justify-content: center;
+    box-shadow: 5px 4px 79px -31px rgb(34 60 80 / 20%);
+    transition: all .5s ease-in-out;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-body img {
+  margin: 1%;
+  width: 50%;
+}
+
+.modal-body p {
+  font-size: 0.9em;
 }
 
 .album {
-  background-color: honeydew;
-  display: flex;
-  margin: 5px;
-  padding: 5px;
-  width: 150px;
-  height: 220px;
-  border: 3px solid;
-  border-radius: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  box-shadow: 5px 4px 79px -31px rgba(34, 60, 80, 0.2);
-  transition: all .5s ease-in-out;
+    background-color: honeydew;
+    display: flex;
+    margin: 0.5%;
+    padding: 0.5%;
+    width: 200px;
+    border: 3px solid;
+    border-radius: 10px;
+    justify-content: center;
+    box-shadow: 5px 4px 79px -31px rgb(34 60 80 / 20%);
+    transition: all .5s ease-in-out;
+    flex-direction: column;
+    align-items: center;
 }
 
 .album:hover {
@@ -185,12 +215,7 @@ img {
   transform: scale(1.1);
 }
 
-p {
-  text-align: center;
-}
-
 .form-input {
-  font-family: 'Roboto', sans-serif;
   color: #333;
   font-size: 1.2rem;
   margin: 5px; 
@@ -204,7 +229,7 @@ p {
   transition: all 0.3s;
 }
 
-#information {
+.information {
   display: flex;
   justify-content: center;
 }
