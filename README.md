@@ -1,6 +1,7 @@
 ## Installation
 
-This project requires NPM(Node Package Manager) to run local web server ```Note: you cant run it directly by just double-clicking index.html, due to CORS policy```.
+This project requires NPM(Node Package Manager) to run local web server 
+```Note: you cant run it directly by just double-clicking index.html, due to CORS policy```.
 
 ```sh
 npm install --global http-server
