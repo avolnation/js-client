@@ -91,7 +91,7 @@ button:hover {
   background-color: gainsboro;
   padding: 0.7em;
   width: 40%;
-  height: 45%;
+  height: 30%;
   border-radius: 20px;
   box-shadow: 2px 1px 10px 0px #424242;
   overflow: auto;
@@ -129,15 +129,15 @@ input {
 }
 
 .post {
-  background-color: #f9ac67;
+  margin-bottom: 2%;
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   border: 5px;
-  border-style: double;
+  /* border-style: double; */
   border-color: black;
   border-radius: 5px;
-  margin-bottom: 5px;
   width: 49%;
   box-shadow: rgb(0 17 51 / 30%) 0px 3px 15px;
 }
@@ -213,6 +213,9 @@ form {
 }
 
 .comment {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   background-color: #F9F8F8;
   border: 5px solid;
   border-radius: 10px;

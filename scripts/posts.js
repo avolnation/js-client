@@ -27,7 +27,7 @@ window.addEventListener("load", async function () {
 let addComment = (e) => {
     e.preventDefault();
     let id = localStorage.getItem('btn-id')
-    console.log(id)
+    // console.log(id)
     const commsId = parseInt(id.match(/\d+/));
 
     let values = getValuesFromModal();
@@ -60,8 +60,6 @@ let addComment = (e) => {
 
     form.reset()
     modal.style.display = "none";
-
-
 }
 
 //* Comments render
@@ -76,7 +74,7 @@ let renderComments = (id) => {
     addCommentButton.addEventListener('click', (e) => openModal(e, 'add comment to'))
     addCommentButton.setAttribute('id', `${id}`)
     addCommentButton.innerHTML = 'Add Comment'
-
+    console.log(commentsData)
     commentsData.get(id).forEach(el => {
         // console.log(e.id)
         // console.log(el.postId)
@@ -124,7 +122,12 @@ let showComments = async (e) => {
         let commentsForParticularPost = await fetchData(`comments?postId=${id}`);
         // console.log(commentsForParticularPost)
         // ...commentsData.get(id)
-        if (commentsForParticularPost != [] && !commentsForParticularPost instanceof Error) {
+        // console.log(commentsForParticularPost.message != 'undefined')
+        // console.log(commentsForParticularPost.length != 0)
+        if(commentsForParticularPost.message){
+            alert(commentsForParticularPost.message);
+        }
+        if (commentsForParticularPost.length != 0) {
             let restData = commentsData.get(id);
             // console.log(!!restData)
             if (restData) {
@@ -134,12 +137,9 @@ let showComments = async (e) => {
                 // console.log(commentsData.get(id))
             }
         }
-
         clearList(comms)
         renderComments(id)
-
     }
-
 
 }
 
@@ -147,10 +147,10 @@ let showComments = async (e) => {
 form.addEventListener('submit', (e) => {
     let lsAction = localStorage.getItem('action');
     if (lsAction == 'add') {
-        addPost(e)
+        addOrModifyPost(e, 'add')
     }
     if (lsAction == 'modify') {
-        modifyPost(e)
+        addOrModifyPost(e, 'modify')
     }
     if (lsAction == 'add comment to') {
         addComment(e)
@@ -171,74 +171,50 @@ let getValuesFromModal = () => {
     return values;
 }
 
-//* Add post
-let addPost = (e) => {
+//* Add or modify posts
+let addOrModifyPost = (e, action) =>{
     e.preventDefault();
+
+    let id = localStorage.getItem('btn-id');
+
     const values = getValuesFromModal();
-    data.push({
-        id: data.length ? data.length + 1 : data.length,
-        body: values['form-body'],
-        title: values['form-title']
-    })
 
-    clearList(info)
+    if(action == 'add'){
+        data.push({
+            id: data.length ? data.length + 1 : data.length,
+            body: values['form-body'],
+            title: values['form-title']
+        })
+    }
 
-    render(data)
-
-    form.reset()
-    modal.style.display = "none";
-}
-
-//* Modify post
-let modifyPost = (e) => {
-
-    e.preventDefault();
-
-    const fields = document.querySelectorAll('input')
-    const values = {};
-    fields.forEach(field => {
-        const {
-            name,
-            value
-        } = field;
-        values[name] = value;
-    })
-
-    let id = localStorage.getItem('btn-id')
-
-    // console.log(e)
-
+    if(action == 'modify'){
     data.forEach(el => {
         if (el.id == id) {
             el.body = values['form-body']
             el.title = values['form-title']
         }
     })
+    }
 
-
+    resetModal();
     clearList(info)
-
-    render(data)
-
-    form.reset()
-    resetPosts();
-    modal.style.display = "none";
+    render(data);
 
 }
 
-//* Reset data from modal after certain action
-let resetPosts = () => {
+//* Reset modal(hide it and reset all inputs/datas)
+let resetModal = () => {
+    modal.style.display = "none";
+    form.reset();
     document.querySelector(".post-title").innerHTML = ''
     document.querySelector(".post-body").innerHTML = ''
 }
 
 //* Reset modal on click
-span.onclick = function () {
-    modal.style.display = "none";
-    form.reset();
-    resetPosts();
-
+span.onclick = () => {
+    resetModal()
 }
+
 
 //* For test purposes
 // document.addEventListener('click', function (e) {
@@ -248,6 +224,7 @@ span.onclick = function () {
 //* Add nav buttons
 let addNavButtons = () => {
     // clearList(inf)
+    let item = document.createElement('div')
 
     let addTaskBtn = document.createElement('button')
     addTaskBtn.innerHTML = 'Add post'
@@ -275,7 +252,7 @@ let addNavButtons = () => {
     input.setAttribute('type', 'text')
     input.setAttribute('class', 'form-input')
     input.setAttribute('placeholder', 'Search')
-
+    
     inf.appendChild(fetchPostsBtn, info)
     inf.appendChild(addTaskBtn, info)
     inf.appendChild(input, info)

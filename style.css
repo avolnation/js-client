@@ -5,6 +5,10 @@ body {
   margin: 0;
 }
 
+html{
+  background-color: #ece6cd;
+}
+
 ul {
   display: flex;
   justify-content: space-around;
@@ -167,7 +171,7 @@ img {
 }
 
 .modal-body .album {
-  background-color: honeydew;
+  background-color: white;
   display: flex;
   margin: 0.5%;
   padding: 0.5%;
@@ -192,7 +196,7 @@ img {
 }
 
 .album {
-  background-color: honeydew;
+  background-color: white;
   display: flex;
   margin: 0.5%;
   padding: 0.5%;
