@@ -7,8 +7,12 @@ import {
     openModal
 } from "./modal.js"
 
+let uid = () => {
+    return (performance.now().toString(36)+Math.random().toString(36)).replace(/\./g,"");
+  };
+
 var data = [];
-var commentsData = new Map();
+var commentsData = new Map(); //* Dictionary of comments
 var postsFetched;
 
 let modal = document.getElementById('myModal');
@@ -23,43 +27,52 @@ window.addEventListener("load", async function () {
     addNavButtons();
 });
 
+//* Listeners for modal
+form.addEventListener('submit', (e) => {
+    let lsAction = localStorage.getItem('action');
+    if (lsAction == 'add') {
+        addOrModifyPost(e, 'add')
+    }
+    if (lsAction == 'modify') {
+        addOrModifyPost(e, 'modify')
+    }
+    if (lsAction == 'add comment to') {
+        addComment(e)
+    }
+});
+
 //* Add comment to post
 let addComment = (e) => {
     e.preventDefault();
     let id = localStorage.getItem('btn-id')
-    // console.log(id)
-    const commsId = parseInt(id.match(/\d+/));
-
+    console.log(id)
+    
     let values = getValuesFromModal();
-    if (commentsData.has(commsId)) {
-        let commsData = commentsData.get(commsId)
+    if (commentsData.has(id)) {
+        let commsData = commentsData.get(id)
         commsData.push({
-            postId: commsId,
-            id: commentsData.length ? commentsData.get(commsId).length + 1 : commentsData.get(commsId),
+            postId: id,
+            id: commentsData.length ? commentsData.get(id).length + 1 : commentsData.get(id),
             body: values['form-body'],
             name: values['form-title']
         })
         // console.log(commsData)
-        commentsData.set(commsId, commsData)
+        commentsData.set(id, commsData)
         // console.log(commentsData.get(commsId))
     } else {
-        commentsData.set(commsId, [{
-            postId: commsId,
+        commentsData.set(id, [{
+            postId: id,
             id: commentsData.length,
             body: values['form-body'],
             name: values['form-title']
         }])
     }
     let commentsDiv = document.querySelector(`div#comments-${id}`)
-    // console.log(id)
-    // console.log(commentsDiv)
 
     clearList(commentsDiv)
-    renderComments(commsId)
-    // clearList(document.querySelector(`.comments-${id}`))
+    renderComments(id)
 
-    form.reset()
-    modal.style.display = "none";
+    resetModal();
 }
 
 //* Comments render
@@ -75,27 +88,27 @@ let renderComments = (id) => {
     addCommentButton.setAttribute('id', `${id}`)
     addCommentButton.innerHTML = 'Add Comment'
     console.log(commentsData)
-    commentsData.get(id).forEach(el => {
-        // console.log(e.id)
-        // console.log(el.postId)
+    if(commentsData.size != 0){
+        commentsData.get(id).forEach(el => {
 
-        // console.log(el.postId)
-        let div = document.createElement('div')
-        let commentName = document.createElement('p')
-        let commentBody = document.createElement('p')
+            let div = document.createElement('div')
+            let commentName = document.createElement('p')
+            let commentBody = document.createElement('p')
+    
+    
+            div.setAttribute('class', 'comment')
+            commentName.innerHTML = el.name
+            commentName.setAttribute('style', 'font-weight: bold;')
+            commentBody.innerHTML = el.body
+    
+            div.appendChild(commentName)
+            div.appendChild(commentBody)
+    
+            comms.appendChild(div)
+    
+        })
+    }
 
-
-        div.setAttribute('class', 'comment')
-        commentName.innerHTML = el.name
-        commentName.setAttribute('style', 'font-weight: bold;')
-        commentBody.innerHTML = el.body
-
-        div.appendChild(commentName)
-        div.appendChild(commentBody)
-
-        comms.appendChild(div)
-
-    })
     comms.appendChild(addCommentButton)
 }
 
@@ -105,7 +118,7 @@ let showComments = async (e) => {
     let eId = e.target.id;
     // console.log(eId)
 
-    let id = parseInt(eId.match(/\d+/))
+    let id = eId.match(/-(.+)/)[1]
     // console.log(id)
 
     let comms = document.querySelector(`div#comments-${id}`)
@@ -118,16 +131,16 @@ let showComments = async (e) => {
         renderComments(id)
     } else {
         clearList(comms)
+
         comms.innerHTML = 'Waiting for server response'
+
         let commentsForParticularPost = await fetchData(`comments?postId=${id}`);
-        // console.log(commentsForParticularPost)
-        // ...commentsData.get(id)
-        // console.log(commentsForParticularPost.message != 'undefined')
-        // console.log(commentsForParticularPost.length != 0)
-        if(commentsForParticularPost.message){
+
+        if (commentsForParticularPost.message) {
             alert(commentsForParticularPost.message);
         }
-        if (commentsForParticularPost.length != 0) {
+
+        if (!(commentsForParticularPost instanceof Error) ) {
             let restData = commentsData.get(id);
             // console.log(!!restData)
             if (restData) {
@@ -137,25 +150,10 @@ let showComments = async (e) => {
                 // console.log(commentsData.get(id))
             }
         }
-        clearList(comms)
-        renderComments(id)
     }
-
+    clearList(comms)
+    renderComments(id)
 }
-
-//* Listeners for modal
-form.addEventListener('submit', (e) => {
-    let lsAction = localStorage.getItem('action');
-    if (lsAction == 'add') {
-        addOrModifyPost(e, 'add')
-    }
-    if (lsAction == 'modify') {
-        addOrModifyPost(e, 'modify')
-    }
-    if (lsAction == 'add comment to') {
-        addComment(e)
-    }
-});
 
 //* Get params from modal
 let getValuesFromModal = () => {
@@ -172,28 +170,28 @@ let getValuesFromModal = () => {
 }
 
 //* Add or modify posts
-let addOrModifyPost = (e, action) =>{
+let addOrModifyPost = (e, action) => {
     e.preventDefault();
 
     let id = localStorage.getItem('btn-id');
 
     const values = getValuesFromModal();
 
-    if(action == 'add'){
+    if (action == 'add') {
         data.push({
-            id: data.length ? data.length + 1 : data.length,
+            id: uid(),
             body: values['form-body'],
             title: values['form-title']
         })
     }
 
-    if(action == 'modify'){
-    data.forEach(el => {
-        if (el.id == id) {
-            el.body = values['form-body']
-            el.title = values['form-title']
-        }
-    })
+    if (action == 'modify') {
+        data.forEach(el => {
+            if (el.id == id) {
+                el.body = values['form-body']
+                el.title = values['form-title']
+            }
+        })
     }
 
     resetModal();
@@ -210,7 +208,7 @@ let resetModal = () => {
     document.querySelector(".post-body").innerHTML = ''
 }
 
-//* Reset modal on click
+//* Reset modal on button (X) click
 span.onclick = () => {
     resetModal()
 }
@@ -223,8 +221,6 @@ span.onclick = () => {
 
 //* Add nav buttons
 let addNavButtons = () => {
-    // clearList(inf)
-    let item = document.createElement('div')
 
     let addTaskBtn = document.createElement('button')
     addTaskBtn.innerHTML = 'Add post'
@@ -252,7 +248,7 @@ let addNavButtons = () => {
     input.setAttribute('type', 'text')
     input.setAttribute('class', 'form-input')
     input.setAttribute('placeholder', 'Search')
-    
+
     inf.appendChild(fetchPostsBtn, info)
     inf.appendChild(addTaskBtn, info)
     inf.appendChild(input, info)
@@ -266,6 +262,7 @@ let addNavButtons = () => {
 
 }
 
+//* Structure for post div
 let postsDivStructure = (el) => {
     let item = document.createElement('div')
     let actionsDiv = document.createElement('div')
@@ -304,10 +301,10 @@ let postsDivStructure = (el) => {
     info.appendChild(item)
 
 }
+
 //* Render(re-render) passed object
 async function render(data) {
     clearList(info)
-
     if (data) {
         data.forEach(el => {
 
@@ -320,7 +317,6 @@ async function render(data) {
         data = await fetchData('posts');
         render(data)
     }
-
 }
 
 export {
